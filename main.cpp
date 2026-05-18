@@ -139,27 +139,23 @@ json convertToJSON(vector<Obat> &data)
 
 bool ValidasiPassword(string password)
 {
-    bool adaAngka = false;
-    bool adaHuruf = false;
+    bool adaHurufAtauAngka = false;
 
-    if (password.length() < 6)
+    for (char c : password)
+    {
+        if (isalpha(c) || isdigit(c))
+        {
+            adaHurufAtauAngka = true;
+            break;
+        }
+    }
+
+    if (!adaHurufAtauAngka)
     {
         return false;
     }
 
-    for (char c : password)
-    {
-        if (isdigit(c))
-        {
-            adaAngka = true;
-        }
-        else if (isalpha(c))
-        {
-            adaHuruf = true;
-        }
-    }
-
-    return adaAngka && adaHuruf;
+    return true;
 }
 
 void registerUser(json &users)
@@ -167,70 +163,115 @@ void registerUser(json &users)
     try
     {
         string username, password;
-        system("cls");
 
-        setColor(11);
-
-        cout << "╔════════════════════════════════════╗\n";
-
-        setColor(13);
-
-        cout << "║          MENU REGISTER             ║\n";
-
-        setColor(11);
-
-        cout << "╠════════════════════════════════════╣\n";
-
-        setColor(10);
-
-        cout << "║ Username : ";
-
-        setColor(7);
-        cin >> username;
-
-        setColor(10);
-
-        cout << "║ Password : ";
-
-        setColor(7);
-        cin >> password;
-
-        cout << "╚════════════════════════════════════╝\n";
-
-        for (auto &u : users["users"])
+        while (true)
         {
-            if (u["username"] == username)
+            system("cls");
+
+            setColor(11);
+            cout << "╔════════════════════════════════════╗\n";
+            setColor(13);
+            cout << "║          MENU REGISTER             ║\n";
+            setColor(11);
+            cout << "╠════════════════════════════════════╣\n";
+
+            setColor(10);
+            cout << "║ Username : ";
+            setColor(7);
+            cin >> username;
+            string usernameLower = username;
+            transform(usernameLower.begin(), usernameLower.end(),
+                      usernameLower.begin(), ::tolower);
+
+            bool duplikat = false;
+
+            for (auto &u : users["users"])
             {
-                throw runtime_error("Username Telah diGunakan!");
-                return;
+                string dbUsername = u["username"].get<string>();
+                transform(dbUsername.begin(), dbUsername.end(),
+                          dbUsername.begin(), ::tolower);
+
+                if (dbUsername == usernameLower)
+                {
+                    duplikat = true;
+                    break;
+                }
             }
-        }
 
-        cout << "Enter password: ";
-        cin >> password;
-        if (!ValidasiPassword(password))
+            if (duplikat)
+            {
+                setColor(12);
+                cout << "╠════════════════════════════════════╣\n";
+                cout << "║   Username sudah digunakan!        ║\n";
+                cout << "║   Silahkan masukkan username lain  ║\n";
+                cout << "╚════════════════════════════════════╝\n";
+                setColor(7);
+                Sleep(1500);
+                continue;
+            }
+            break;
+        }
+        while (true)
         {
-            setColor(12);
-            throw runtime_error("Password harus minimal 6 karakter dan mengandung huruf serta angka!");
-            return;
+            system("cls");
+
+            setColor(11);
+            cout << "╔════════════════════════════════════╗\n";
+            setColor(13);
+            cout << "║          MENU REGISTER             ║\n";
+            setColor(11);
+            cout << "╠════════════════════════════════════╣\n";
+
+            setColor(10);
+            cout << "║ Username : ";
+            setColor(7);
+            cout << username << "\n";
+
+            setColor(10);
+            cout << "║ Password : ";
+            setColor(7);
+            cin >> password;
+
+            if (!ValidasiPassword(password))
+            {
+                setColor(12);
+                cout << "╠════════════════════════════════════╣\n";
+                cout << "║   Password tidak valid!            ║\n";
+                cout << "║   Tidak boleh simbol semua,        ║\n";
+                cout << "║   harus ada huruf atau angka!      ║\n";
+                cout << "╚════════════════════════════════════╝\n";
+                setColor(7);
+                Sleep(1500);
+                continue;
+            }
+            break;
         }
-
         json u;
-
         u["username"] = username;
         u["password"] = password;
-
         u["role"] = "kasir";
 
         users["users"].push_back(u);
-
         saveJSON("users.json", users);
 
-        cout << "Registrasi berhasil!\n";
+        system("cls");
+        setColor(10);
+        cout << "╔════════════════════════════════════╗\n";
+        cout << "║        REGISTRASI BERHASIL!        ║\n";
+        cout << "╚════════════════════════════════════╝\n";
+        setColor(7);
+        system("pause");
     }
     catch (exception &e)
     {
-        cout << "Gagal Register! : " << e.what() << endl;
+        setColor(12);
+        cout << "╔════════════════════════════════════╗\n";
+        cout << "║        REGISTRASI GAGAL!           ║\n";
+        cout << "╠════════════════════════════════════╣\n";
+        cout << "║ " << left << setw(35) << e.what() << "║\n";
+        cout << "╚════════════════════════════════════╝\n";
+        setColor(7);
+        system("pause");
     }
 }
 
@@ -241,60 +282,82 @@ string loginUser(json users)
     system("cls");
 
     setColor(11);
-
     cout << "╔════════════════════════════════════╗\n";
-
     setColor(14);
-
     cout << "║            MENU LOGIN              ║\n";
-
     setColor(11);
-
     cout << "╠════════════════════════════════════╣\n";
-
     setColor(10);
-
     cout << "║ Username : ";
-
     setColor(7);
     cin >> username;
-
     setColor(10);
-
     cout << "║ Password : ";
-
     setColor(7);
     cin >> password;
 
     cout << "╚════════════════════════════════════╝\n";
 
+    if (username.empty() || password.empty())
+    {
+        setColor(12);
+        cout << "╔════════════════════════════════════╗\n";
+        cout << "║   Username/Password tidak boleh    ║\n";
+        cout << "║   kosong!                          ║\n";
+        cout << "╚════════════════════════════════════╝\n";
+        setColor(7);
+        Sleep(1500);
+        return "gagal";
+    }
+    string usernameLower = username;
+    transform(usernameLower.begin(), usernameLower.end(),
+              usernameLower.begin(), ::tolower);
+
     for (auto &u : users["users"])
     {
-        if (u["username"] == username && u["password"] == password)
+        string dbUsername = u["username"].get<string>();
+        transform(dbUsername.begin(), dbUsername.end(),
+                  dbUsername.begin(), ::tolower);
+
+        if (dbUsername == usernameLower &&
+            u["password"] == password)
         {
+            setColor(10);
+            cout << "╔════════════════════════════════════╗\n";
+            cout << "║         LOGIN BERHASIL!            ║\n";
+            cout << "╚════════════════════════════════════╝\n";
+            setColor(7);
+            Sleep(1500);
             return u["role"];
         }
     }
+    setColor(12);
+    cout << "╔════════════════════════════════════╗\n";
+    cout << "║   Username atau Password Salah!    ║\n";
+    cout << "╚════════════════════════════════════╝\n";
+    setColor(7);
+    Sleep(1500);
     return "gagal";
 }
-
 void tampilkanObat(vector<Obat> &data)
 {
     system("cls");
     setColor(11);
 
     cout << "\n";
-    cout << "╔═════════════════════════════════════════════════════════════════════╗\n";
-    cout << "║                         DATA OBAT APOTEK                            ║\n";
-    cout << "╠════╦════════════════╦════════════╦══════════╦══════════╦═══════════ ╣\n";
+    cout << "╔══════════════════════════════════════════════════════════════════════╗\n";
 
     setColor(14);
-
-    cout << "║ No ║ Nama Obat      ║ Jenis      ║ Harga    ║ Stok     ║ Expired    ║\n";
+    cout << "║                           DATA OBAT APOTEK                           ║\n";
 
     setColor(11);
+    cout << "╠════╦════════════════╦════════════╦══════════════╦════════╦═══════════╣\n";
 
-    cout << "╠════╬══════════════════════╬════════════╬══════════╬══════════╬════  ╣\n";
+    setColor(14);
+    cout << "║ No ║ Nama Obat      ║ Jenis      ║ Harga        ║ Stok   ║ Expired   ║\n";
+
+    setColor(11);
+    cout << "╠════╬════════════════╬════════════╬══════════════╬════════╬═══════════╣\n";
 
     int no = 1;
 
@@ -309,18 +372,16 @@ void tampilkanObat(vector<Obat> &data)
              << "║ "
              << setw(11) << o.jenis
              << "║ "
-             << setw(9) << formatRupiah(o.harga)
+             << setw(13) << formatRupiah(o.harga)
              << "║ "
-             << setw(9) << o.stok
+             << setw(7) << o.stok
              << "║ "
-             << setw(10)
-             << (o.expired.empty() ? "-" : o.expired)
+             << setw(10) << (o.expired.empty() ? "-" : o.expired)
              << "║\n";
     }
 
     setColor(11);
-
-    cout << "╚════╩════════════════╩════════════╩══════════╩══════════╩═══════════ ╝\n";
+    cout << "╚════╩════════════════╩════════════╩══════════════╩════════╩═══════════╝\n";
 
     setColor(7);
     cin.ignore();
@@ -376,7 +437,7 @@ void tambahObat(vector<Obat> &data)
 
         setColor(10);
 
-        cout << "║               TAMBAH OBAT                   ║\n";
+        cout << "║                TAMBAH OBAT                   ║\n";
 
         setColor(11);
 
@@ -449,7 +510,7 @@ void tambahObat(vector<Obat> &data)
 
         setColor(10);
 
-        cout << "║      [✔] Obat berhasil ditambahkan!         ║\n";
+        cout << "║           Obat berhasil ditambahkan!         ║\n";
 
         setColor(11);
 
@@ -510,7 +571,7 @@ void updateObat(vector<Obat> &data)
         return;
     }
 
-    if (nomor < 1 || nomor > data.size())
+    if (nomor < 1 || nomor > static_cast<int>(data.size()))
     {
         setColor(12);
 
@@ -649,7 +710,7 @@ void hapusObat(vector<Obat> &data)
         return;
     }
 
-    if (nomor < 1 || nomor > data.size())
+    if (nomor < 1 || nomor > static_cast<int>(data.size()))
     {
         setColor(12);
 
@@ -730,7 +791,7 @@ void searchObat(vector<Obat> &data)
 
     setColor(14);
 
-    cout << "║                 SEARCH OBAT                 ║\n";
+    cout << "║                 SEARCH OBAT                  ║\n";
 
     setColor(11);
 
@@ -903,7 +964,7 @@ void sortingNamaObat(vector<Obat> &data)
              << setw(7) << o.stok
              << "║ "
              << setw(15) << o.expired
-             << "║\n";
+             << "  ║\n";
     }
 
     setColor(11);
@@ -933,7 +994,7 @@ void transaksiData(vector<Obat> &data, json &transaksi)
     tampilkanObat(data);
 
     setColor(11);
-    cout << "\n╔════════════════════════════════════════╗\n";
+    cout << "\n╔══════════════════════════════════════════╗\n";
     setColor(14);
     cout << "║        TRANSAKSI PEMBELIAN OBAT          ║\n";
     setColor(11);
@@ -956,7 +1017,7 @@ void transaksiData(vector<Obat> &data, json &transaksi)
         return;
     }
 
-    if (nomorObat < 1 || nomorObat > data.size())
+    if (nomorObat < 1 || nomorObat > static_cast<int>(data.size()))
     {
         setColor(12);
         cout << "\nNomor Obat Tidak Valid!\n";
@@ -1045,15 +1106,27 @@ void transaksiData(vector<Obat> &data, json &transaksi)
 
     if (konfirmasi != 'y' && konfirmasi != 'Y')
     {
-        setColor(14);
+        json t;
+        int nomor = transaksi["transaksi"].size() + 1;
+        t["id"] = "TR" + to_string(nomor);
+        t["obat"] = o->nama;
+        t["jumlah"] = jumlah;
+        t["total"] = TotalHarga;
+        t["bayar"] = 0;
+        t["kembalian"] = 0;
+        t["status"] = "dibatalkan";
+
+        transaksi["transaksi"].push_back(t);
+        saveJSON("transaksi.json", transaksi);
+        saveJSON("obat.json", convertToJSON(data));
+
         cout << "\nTransaksi dibatalkan!\n";
-        setColor(7);
         Sleep(1500);
         return;
     }
 
     setColor(3);
-    cout << "\nMasukkan Uang Bqayar : ";
+    cout << "\nMasukkan Uang Bayar : ";
     setColor(7);
 
     if (!(cin >> uangBayar))
@@ -1104,7 +1177,7 @@ void transaksiData(vector<Obat> &data, json &transaksi)
 
     cout << "╔════════════════════════════════════════════════════╗\n";
     setColor(14);
-    cout << "║                    STRUK BELANJA                  ║\n";
+    cout << "║                    STRUK BELANJA                   ║\n";
     setColor(11);
     cout << "╠════════════════════════════════════════════════════╣\n";
 
@@ -1196,7 +1269,7 @@ void riwayatTransaksi(json transaksi)
 
         setColor(7);
 
-        cout << "║\n";
+        cout << "  ║\n";
     }
 
     setColor(11);
@@ -1309,11 +1382,11 @@ void menuKasir(vector<Obat> &data, json &transaksi)
 
         setColor(10);
 
-        cout << "║  [1] View Data Obat                 ║\n";
-        cout << "║  [2] Cari Obat                      ║\n";
-        cout << "║  [3] Transaksi                      ║\n";
-        cout << "║  [4] Riwayat Transaksi              ║\n";
-        cout << "║  [5] Kembali                        ║\n";
+        cout << "║  [1] View Data Obat                  ║\n";
+        cout << "║  [2] Cari Obat                       ║\n";
+        cout << "║  [3] Transaksi                       ║\n";
+        cout << "║  [4] Riwayat Transaksi               ║\n";
+        cout << "║  [5] Kembali                         ║\n";
 
         setColor(11);
 
@@ -1368,12 +1441,12 @@ void menuAdmin(vector<Obat> &data, json &transaksi)
 
         setColor(10);
 
-        cout << "║  [1] Tambah Data Obat               ║\n";
-        cout << "║  [2] Lihat Data Obat                ║\n";
-        cout << "║  [3] Update Obat                    ║\n";
-        cout << "║  [4] Hapus Obat                     ║\n";
-        cout << "║  [5] Riwayat Transaksi              ║\n";
-        cout << "║  [6] Logout                         ║\n";
+        cout << "║  [1] Tambah Data Obat                ║\n";
+        cout << "║  [2] Lihat Data Obat                 ║\n";
+        cout << "║  [3] Update Obat                     ║\n";
+        cout << "║  [4] Hapus Obat                      ║\n";
+        cout << "║  [5] Riwayat Transaksi               ║\n";
+        cout << "║  [6] Logout                          ║\n";
 
         setColor(11);
 
