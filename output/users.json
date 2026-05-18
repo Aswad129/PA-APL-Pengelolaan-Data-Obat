@@ -4,11 +4,6 @@
             "password": "admin064",
             "role": "admin",
             "username": "admin"
-        },
-        {
-            "password": "1234",
-            "role": "kasir",
-            "username": "budi"
         }
     ]
 }
