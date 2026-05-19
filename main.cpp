@@ -640,7 +640,7 @@ void updateObat(vector<Obat> &data)
         o->stok = stoi(input);
     }
 
-    cout << "║ Expired Baru [" << o->expired << "] : ";
+    cout << "║ Expired Baru(YYYY-MM-DD) [" << o->expired << "] : ";
     getline(cin, input);
 
     if (!input.empty())
