@@ -445,11 +445,11 @@ void tambahObat(vector<Obat> &data)
 
         setColor(14);
 
-        cout << "║ ID Obat    : " << o.id << endl;
+        cout << "║ ID Obat             : " << o.id << endl;
 
         setColor(3);
 
-        cout << "║ Nama Obat  : ";
+        cout << "║ Nama Obat           : ";
 
         setColor(7);
         cin.ignore();
@@ -460,7 +460,7 @@ void tambahObat(vector<Obat> &data)
 
         setColor(3);
 
-        cout << "║ Jenis      : ";
+        cout << "║ Jenis               : ";
 
         setColor(7);
         getline(cin, o.jenis);
@@ -470,7 +470,7 @@ void tambahObat(vector<Obat> &data)
 
         setColor(3);
 
-        cout << "║ Expired(YYYY-MM-DD)    : ";
+        cout << "║ Expired(YYYY-MM-DD) : ";
 
         setColor(7);
 
@@ -481,7 +481,7 @@ void tambahObat(vector<Obat> &data)
 
         setColor(3);
 
-        cout << "║ Harga      : ";
+        cout << "║ Harga               : ";
 
         setColor(7);
 
@@ -493,7 +493,7 @@ void tambahObat(vector<Obat> &data)
 
         setColor(3);
 
-        cout << "║ Stok       : ";
+        cout << "║ Stok                : ";
 
         setColor(7);
 
@@ -530,9 +530,9 @@ void tambahObat(vector<Obat> &data)
         setColor(12);
 
         cout << "\n╔══════════════════════════════════════════════╗\n";
-        cout << "║              TERJADI ERROR                  ║\n";
+        cout << "║              TERJADI ERROR                   ║\n";
         cout << "╠══════════════════════════════════════════════╣\n";
-        cout << "║ " << e.what() << endl;
+        cout << "║         " << e.what() << endl;
         cout << "╚══════════════════════════════════════════════╝\n";
 
         setColor(7);
@@ -549,7 +549,7 @@ void updateObat(vector<Obat> &data)
     int nomor;
 
     setColor(11);
-    cout << "\n╔══════════════════════════════════════════════╗\n";
+    cout << "\n╔════════════════════════════════════════════════╗\n";
     setColor(14);
     cout << "║                UPDATE OBAT                     ║\n";
     setColor(11);
@@ -586,9 +586,9 @@ void updateObat(vector<Obat> &data)
 
     Obat *o = &data[nomor - 1];
     setColor(11);
-    cout << "╠══════════════════════════════════════════════╣\n";
+    cout << "╠════════════════════════════════════════════════╣\n";
     setColor(10);
-    cout << "║ Data Lama                                    ║\n";
+    cout << "║ Data Lama                                      ║\n";
     setColor(7);
 
     cout << "║ Nama     :" << o->nama << endl;
@@ -598,10 +598,10 @@ void updateObat(vector<Obat> &data)
     cout << "║ Stok     :" << o->stok << endl;
 
     setColor(11);
-    cout << "╠══════════════════════════════════════════════╣\n";
+    cout << "╠════════════════════════════════════════════════╣\n";
     setColor(14);
 
-    cout << "║              INPUT DATA BARU                 ║\n";
+    cout << "║                INPUT DATA BARU                 ║\n";
     setColor(3);
 
     string input;
@@ -662,11 +662,11 @@ void updateObat(vector<Obat> &data)
 
     saveJSON("obat.json", convertToJSON(data));
     setColor(11);
-    cout << "╠══════════════════════════════════════════════╣\n";
+    cout << "╠════════════════════════════════════════════════╣\n";
     setColor(10);
-    cout << "║        Data obat berhasil diupdate!          ║\n";
+    cout << "║          Data obat berhasil diupdate!          ║\n";
     setColor(11);
-    cout << "╚══════════════════════════════════════════════╝\n";
+    cout << "╚════════════════════════════════════════════════╝\n";
     setColor(7);
     system("pause");
 }
@@ -685,7 +685,7 @@ void hapusObat(vector<Obat> &data)
 
     setColor(12);
 
-    cout << "║                 HAPUS OBAT                  ║\n";
+    cout << "║                 HAPUS OBAT                   ║\n";
 
     setColor(11);
 
@@ -732,7 +732,7 @@ void hapusObat(vector<Obat> &data)
 
     setColor(14);
 
-    cout << "║            DATA YANG AKAN DIHAPUS           ║\n";
+    cout << "║            DATA YANG AKAN DIHAPUS            ║\n";
 
     setColor(7);
 
@@ -971,7 +971,7 @@ void sortingNamaObat(vector<Obat> &data)
 
     setColor(11);
 
-    cout << "╚════╩════════╩════════════════╩════════════╩════════════╩════════╩═════════════════╝\n";
+    cout << "╚════╩════════╩════════════════╩════════════╩════════════╩════════╩═══════════════════╝\n";
 
     setColor(3);
 
@@ -1080,21 +1080,21 @@ void transaksiData(vector<Obat> &data, json &transaksi)
 
     cout << "║ Nama Obat    : "
          << left << setw(20) << o->nama
-         << "║\n";
+         << "  ║\n";
 
     cout << "║ Harga Satuan : "
          << left << setw(20) << formatRupiah(o->harga)
-         << "║\n";
+         << "  ║\n";
 
     cout << "║ Jumlah Beli  : "
          << left << setw(20) << jumlah
-         << "║\n";
+         << "  ║\n";
 
     cout << "╠══════════════════════════════════════╣\n";
 
     cout << "║ Total Bayar  : "
          << left << setw(20) << formatRupiah(TotalHarga)
-         << "║\n";
+         << "  ║\n";
 
     setColor(11);
 
@@ -1226,7 +1226,7 @@ void riwayatTransaksi(json transaksi)
 
     setColor(14);
 
-    cout << "║                              RIWAYAT TRANSAKSI                                     ║\n";
+    cout << "║                                 RIWAYAT TRANSAKSI                                  ║\n";
 
     setColor(11);
 
