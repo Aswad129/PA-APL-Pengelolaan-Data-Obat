@@ -452,7 +452,8 @@ void tambahObat(vector<Obat> &data)
         cout << "║ Nama Obat  : ";
 
         setColor(7);
-        cin >> o.nama;
+        cin.ignore();
+        getline(cin, o.nama);
 
         if (o.nama.empty())
             throw runtime_error("Nama tidak boleh kosong!");
@@ -462,7 +463,7 @@ void tambahObat(vector<Obat> &data)
         cout << "║ Jenis      : ";
 
         setColor(7);
-        cin >> o.jenis;
+        getline(cin, o.jenis);
 
         if (o.jenis.empty())
             throw runtime_error("Jenis tidak boleh kosong!");
@@ -472,7 +473,8 @@ void tambahObat(vector<Obat> &data)
         cout << "║ Expired    : ";
 
         setColor(7);
-        cin >> o.expired;
+
+        getline(cin, o.expired);
 
         if (!validTanggal(o.expired))
             throw runtime_error("Format tanggal tidak valid!");
