@@ -470,7 +470,7 @@ void tambahObat(vector<Obat> &data)
 
         setColor(3);
 
-        cout << "║ Expired    : ";
+        cout << "║ Expired(YYYY-MM-DD)    : ";
 
         setColor(7);
 
