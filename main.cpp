@@ -1604,14 +1604,13 @@ int main()
 
         if (pilihan < 1 || pilihan > 3)
         {
+            system("cls");
             setColor(12);
-
-            cout << "\nPilihan hanya 1 - 3!\n";
-
+            cout << "╔════════════════════════════════════╗\n";
+            cout << "║      Pilihan hanya 1 - 3!          ║\n";
+            cout << "╚════════════════════════════════════╝\n";
             setColor(7);
-
             Sleep(1000);
-
             continue;
         }
 
@@ -1619,11 +1618,9 @@ int main()
         {
             registerUser(users);
         }
-
         else if (pilihan == 2)
         {
             int kesempatanLogin = 3;
-            bool berhasil = false;
 
             while (kesempatanLogin > 0)
             {
@@ -1631,30 +1628,31 @@ int main()
 
                 if (role == "admin")
                 {
-                    cout << "Anda Login Sebagai Admin!\n";
                     menuAdmin(data, transaksi);
-
-                    berhasil = true;
                     break;
                 }
                 else if (role == "kasir")
                 {
-                    cout << "Anda Login Sebagai Kasir!\n";
                     menuKasir(data, transaksi);
-
-                    berhasil = true;
                     break;
                 }
                 else
                 {
                     kesempatanLogin--;
-                    cout << "\nUsername atau Password Anda Salah!\n";
+                    if (kesempatanLogin == 0)
+                    {
+                        system("cls");
+                        setColor(12);
+                        cout << "╔════════════════════════════════════╗\n";
+                        cout << "║     Kesempatan Login Habis!        ║\n";
+                        cout << "╠════════════════════════════════════╣\n";
+                        cout << "║     Program Berhenti...            ║\n";
+                        cout << "╚════════════════════════════════════╝\n";
+                        setColor(7);
+                        system("pause");
+                        return 0;
+                    }
                 }
-            }
-            if (!berhasil)
-            {
-                cout << "Kesempatan login habis! Program Berhenti....\n";
-                return 0;
             }
         }
 
